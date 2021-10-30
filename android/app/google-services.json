@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "532516934361",
+    "project_id": "wallpaper-app-95e24",
+    "storage_bucket": "wallpaper-app-95e24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532516934361:android:608a58b8795ea98e7364c8",
+        "android_client_info": {
+          "package_name": "com.talha.iqbal.wallpaper_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532516934361-cmmfetul43rref5t7uqr24tr0i4tdo86.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAv6-HBATJZ84LQsPLUHcUlU3LtDVkHEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532516934361-cmmfetul43rref5t7uqr24tr0i4tdo86.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

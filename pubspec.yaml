@@ -40,6 +40,13 @@ dependencies:
   firebase_core: ^1.8.0
   firebase_auth: ^3.1.4
   cool_alert: ^1.1.0
+  http: ^0.13.4
+  animated_text_kit: ^4.2.1
+  cached_network_image_builder: ^0.2.0
+  image_gallery_saver: ^1.7.1
+  dio: ^4.0.1
+  permission_handler: ^8.2.5
+
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +74,7 @@ flutter:
   assets:
      - assets/splash/
      - assets/background_photo/
+     - assets/photo_category/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

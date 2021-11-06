@@ -15,6 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List trendimage=[];
+  List photo_id=[];
   List imageName=['Architectural','Car','Editorial','Fashion','Galaxy','joker','Photojournalism','Portrait ','Sports','Still_Life'];
   List categoryName=['Architectural','Car','Editorial','Fashion','Galaxy','Joker','Journalism','Portrait','Sports','Still_Life'];
   getImage()async{
@@ -25,8 +26,11 @@ class _MainScreenState extends State<MainScreen> {
     }
     );
     String data= response.body;
+    var photoId;
     for(var i=1;i<80;i++){
       var photo = jsonDecode(data)['photos'][i]['src']['portrait'];
+       photoId = jsonDecode(data)['photos'][i]['photographer_id'];
+      photo_id.add(photoId);
       trendimage.add(photo);
     }
     setState(() {
@@ -158,7 +162,7 @@ class _MainScreenState extends State<MainScreen> {
                                    borderRadius: BorderRadius.circular(30),
                                    child: GestureDetector(
                                      onTap: (){
-                                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageDisplay(image: trendimage[index],)));
+                                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageDisplay(image: trendimage[index],photoId: photo_id[index],)));
                                      },
                                      child: Image.network(trendimage[index],fit: BoxFit.cover,loadingBuilder:(context, child, loadingProgress) {
                                        if (loadingProgress == null) return child;

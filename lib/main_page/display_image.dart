@@ -6,8 +6,9 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 
 class ImageDisplay extends StatefulWidget {
-  ImageDisplay({this.image});
+  ImageDisplay({this.image,this.photoId});
   final image;
+  final photoId;
 
   @override
   _ImageDisplayState createState() => _ImageDisplayState();
@@ -17,7 +18,9 @@ class _ImageDisplayState extends State<ImageDisplay> {
 
 
   _save() async {
+    var isShown = await Permission.storage.request();
     var status = await Permission.storage.status;
+    print(status);
     if(status.isDenied){
       CoolAlert.show(
         context: context,
@@ -32,7 +35,7 @@ class _ImageDisplayState extends State<ImageDisplay> {
       final result = await ImageGallerySaver.saveImage(
           Uint8List.fromList(response.data),
           quality: 60,
-          name: "hello");
+          name:widget.photoId );
       Navigator.pop(context);
       print(result);
       CoolAlert.show(

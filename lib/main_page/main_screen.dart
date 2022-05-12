@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:cached_network_image_builder/cached_network_image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallpaper_app/main_page/display_image.dart';
 import 'package:wallpaper_app/main_page/search_result.dart';
+import 'package:wallpaper_app/model/image_model.dart';
 import 'categorey.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,8 +14,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List trendimage=[];
-  List photo_id=[];
+  List<ImageModel> images=[];
   List imageName=['Architectural','Car','Editorial','Fashion','Galaxy','joker','Photojournalism','Portrait ','Sports','Still_Life'];
   List categoryName=['Architectural','Car','Editorial','Fashion','Galaxy','Joker','Journalism','Portrait','Sports','Still_Life'];
   getImage()async{
@@ -25,16 +24,22 @@ class _MainScreenState extends State<MainScreen> {
       "Authorization":apikey,
     }
     );
-    String data= response.body;
-    var photoId;
-    for(var i=1;i<80;i++){
-      var photo = jsonDecode(data)['photos'][i]['src']['portrait'];
-       photoId = jsonDecode(data)['photos'][i]['photographer_id'];
-      photo_id.add(photoId);
-      trendimage.add(photo);
+    var data= jsonDecode(response.body);
+    for (var image in data["photos"]){
+      images.add(ImageModel.fromJson(image));
     }
     setState(() {
+
     });
+    // var photoId;
+    // for(var i=1;i<80;i++){
+    //   var photo = jsonDecode(data)['photos'][i]['src']['portrait'];
+    //    photoId = jsonDecode(data)['photos'][i]['photographer_id'];
+    //   photo_id.add(photoId);
+    //   trendimage.add(photo);
+    // }
+    // setState(() {
+    // });
   }
 
   @override
@@ -50,20 +55,17 @@ class _MainScreenState extends State<MainScreen> {
         child: Scaffold(
            body: SingleChildScrollView(
              child: Container(
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
                     'assets/background_photo/main_background.jpg',
                   ),
                   fit: BoxFit.cover)),
         child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.black45.withOpacity(0.5),
+          color: Colors.black.withOpacity(0.5),
           child: Column(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(20),
                   child: const Text('Wallpaper',style: TextStyle(
@@ -71,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
                     fontSize: 25
                   ),),
                 ),
-                const SizedBox(height: 10,),
+                 SizedBox(height: 10,),
                 Container(
                   margin: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -84,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
                           offset: const Offset(0, 3), // changes position of shadow
                         ),
                       ],
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(5)
                   ),
                   child:  TextField(
                     onSubmitted: (value)=>Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchResult(name:value,))),
@@ -137,46 +139,45 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ],
                 ),
-                 Expanded(
-                   child: Container(
-                     child: ListView.builder(
-                       physics: ScrollPhysics(),
-                       itemCount: trendimage.length,
-                         itemBuilder:(context,index){
-                           if(trendimage==null){
-                             return CircularProgressIndicator();
-                           }
-                           return Container(
-                             width:MediaQuery.of(context).size.width,
-                             padding: EdgeInsets.all(20),
+                 Container(
+                   child: ListView.builder(
+                     shrinkWrap: true,
+                     physics: NeverScrollableScrollPhysics(),
+                     itemCount: images.length,
+                       itemBuilder:(context,index){
+                         if(images==null){
+                           return CircularProgressIndicator();
+                         }
+                         return Container(
+                           width:MediaQuery.of(context).size.width,
+                           padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
 
-                             height:MediaQuery.of(context).size.width/1.3,
-                             child:Hero(
-                               tag: trendimage[index],
-                               child: Container(
-                                 decoration: BoxDecoration(
-                                 border: Border.all(color: Colors.white.withOpacity(0.5)),
-                                   borderRadius: BorderRadius.circular(30)
-                                 ),
-                                 child: ClipRRect(
-                                   borderRadius: BorderRadius.circular(30),
-                                   child: GestureDetector(
-                                     onTap: (){
-                                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageDisplay(image: trendimage[index],photoId: photo_id[index],)));
-                                     },
-                                     child: Image.network(trendimage[index],fit: BoxFit.cover,loadingBuilder:(context, child, loadingProgress) {
-                                       if (loadingProgress == null) return child;
-                                       return Center(
-                                         child: CircularProgressIndicator(),
-                                       );
-                                     },),
-                                   ),
+                           height:MediaQuery.of(context).size.width/1.3,
+                           child:Hero(
+                             tag: images[index],
+                             child: Container(
+                               decoration: BoxDecoration(
+                               border: Border.all(color: Colors.white.withOpacity(0.5)),
+                                 borderRadius: BorderRadius.circular(5)
+                               ),
+                               child: ClipRRect(
+                                 borderRadius: BorderRadius.circular(5),
+                                 child: GestureDetector(
+                                   onTap: (){
+                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ImageDisplay(image: images[index].src!.large2x.toString(),photoId: images[index].id,)));
+                                   },
+                                   child: Image.network(images[index].src!.medium.toString(),fit: BoxFit.cover,loadingBuilder:(context, child, loadingProgress) {
+                                     if (loadingProgress == null) return child;
+                                     return Center(
+                                       child: CircularProgressIndicator(),
+                                     );
+                                   },),
                                  ),
                                ),
-                             ) ,
-                           );
-                         } ),
-                   ),
+                             ),
+                           ) ,
+                         );
+                       } ),
                  )
                 ],
           ),

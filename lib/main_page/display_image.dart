@@ -56,7 +56,11 @@ class _ImageDisplayState extends State<ImageDisplay> {
             children:[  SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Image.network(widget.image,fit: BoxFit.cover,),
+              child: Image.network(widget.image,fit: BoxFit.cover,loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress){
+                if (loadingProgress == null) return child;
+                return CircularProgressIndicator();
+              },),
             ),
             GestureDetector(
               onTap: ()=> _save(),
